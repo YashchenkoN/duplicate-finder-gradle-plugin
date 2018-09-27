@@ -12,6 +12,11 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = 'io.github.yashchenko.duplicatefinder'
+            implementationClass = 'io.github.yashchenko.duplicatefinder.DuplicateFinderPlugin'
+        }
+    }
 }
