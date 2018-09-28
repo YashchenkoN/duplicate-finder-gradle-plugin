@@ -14,7 +14,7 @@ repositories {
 
 gradlePlugin {
     plugins {
-        simplePlugin {
+        duplicateFinder {
             id = 'io.github.yashchenko.duplicatefinder'
             implementationClass = 'io.github.yashchenko.duplicatefinder.DuplicateFinderPlugin'
         }
