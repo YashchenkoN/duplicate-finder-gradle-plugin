@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'java-gradle-plugin'
+    id "com.gradle.plugin-publish" version "0.10.0"
 }
 
 group 'io.github.yashchenko'
@@ -21,6 +22,19 @@ gradlePlugin {
         duplicateFinder {
             id = 'io.github.yashchenko.duplicatefinder'
             implementationClass = 'io.github.yashchenko.duplicatefinder.DuplicateFinderPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/YashchenkoN/duplicate-finder-gradle-plugin'
+    vcsUrl = 'https://github.com/YashchenkoN/duplicate-finder-gradle-plugin'
+    description = 'Duplicate Finder Plugin'
+    tags = ['duplicatefinder', 'duplicateclasses']
+
+    plugins {
+        duplicateFinder {
+            displayName = 'Duplicate Finder Plugin'
         }
     }
 }
