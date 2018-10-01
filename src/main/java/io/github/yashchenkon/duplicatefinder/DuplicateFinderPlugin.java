@@ -10,6 +10,6 @@ public class DuplicateFinderPlugin implements Plugin<Project> {
 
     @Override
     public void apply(final Project project) {
-
+        project.getTasks().create("duplicateClassesCheck", DuplicateFinderTask.class);
     }
 }
