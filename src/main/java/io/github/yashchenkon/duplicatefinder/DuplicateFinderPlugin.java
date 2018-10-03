@@ -8,8 +8,11 @@ import org.gradle.api.Project;
  */
 public class DuplicateFinderPlugin implements Plugin<Project> {
 
+    private static final String DUPLICATE_FINDER = "duplicateFinder";
+
     @Override
     public void apply(final Project project) {
-        project.getTasks().create("duplicateClassesCheck", DuplicateFinderTask.class);
+        project.getExtensions().create(DUPLICATE_FINDER, DuplicateFinderExtension.class);
+        project.getTasks().create(DUPLICATE_FINDER, DuplicateFinderTask.class);
     }
 }
