@@ -12,6 +12,7 @@ import java.util.zip.ZipFile;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.tasks.TaskAction;
 
 import lombok.SneakyThrows;
@@ -25,19 +26,21 @@ public class DuplicateFinderTask extends DefaultTask {
     @SneakyThrows
     public void checkForDuplicateClasses() {
         final Map<String, Set<String>> modulesByFile = new HashMap<>();
-        getProject().getConfigurations().forEach(configuration -> {
-            configuration.getResolvedConfiguration().getResolvedArtifacts().forEach(artifact -> {
-                final Enumeration<? extends ZipEntry> entries = new ZipFile(artifact.getFile()).entries();
-                while (entries.hasMoreElements()) {
-                    final ZipEntry entry = entries.nextElement();
-                    if (!entry.isDirectory() && !entry.getName().startsWith("META-INF/")) {
-                        final Set<String> modules = modulesByFile.getOrDefault(entry.getName(), new HashSet<>());
-                        modules.add(artifact.getModuleVersion().toString());
-                        modulesByFile.put(entry.getName(), modules);
-                    }
-                }
-            });
-        });
+        getProject().getConfigurations().stream()
+                .filter(Configuration::isCanBeResolved)
+                .forEach(configuration -> {
+                    configuration.getResolvedConfiguration().getResolvedArtifacts().forEach(artifact -> {
+                        final Enumeration<? extends ZipEntry> entries = new ZipFile(artifact.getFile()).entries();
+                        while (entries.hasMoreElements()) {
+                            final ZipEntry entry = entries.nextElement();
+                            if (!entry.isDirectory() && !entry.getName().startsWith("META-INF/")) {
+                                final Set<String> modules = modulesByFile.getOrDefault(entry.getName(), new HashSet<>());
+                                modules.add(artifact.getModuleVersion().toString());
+                                modulesByFile.put(entry.getName(), modules);
+                            }
+                        }
+                    });
+                });
 
         final List<Map.Entry<String, Set<String>>> duplicated = modulesByFile.entrySet().stream()
                 .filter(e -> e.getValue().size() > 1)
