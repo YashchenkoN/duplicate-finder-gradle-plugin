@@ -25,6 +25,8 @@ public class DuplicateFinderTask extends DefaultTask {
     @TaskAction
     @SneakyThrows
     public void checkForDuplicateClasses() {
+        final DuplicateFinderExtension extension = (DuplicateFinderExtension) getProject().getExtensions().getByName(Constants.DUPLICATE_FINDER);
+
         final Map<String, Set<String>> modulesByFile = new HashMap<>();
         getProject().getConfigurations().stream()
                 .filter(Configuration::isCanBeResolved)
