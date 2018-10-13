@@ -2,6 +2,8 @@ package io.github.yashchenkon.duplicatefinder.classpath;
 
 import java.util.function.Predicate;
 
+import io.github.yashchenkon.duplicatefinder.DuplicateFinderExtension;
+
 /**
  * @author Mykola Yashchenko
  */
@@ -28,6 +30,10 @@ public class ClasspathFilter implements Predicate<String> {
             "^.svn$",
             "^.hg$",
             "^.bzr$");
+
+    public ClasspathFilter(final DuplicateFinderExtension extension) {
+
+    }
 
     @Override
     public boolean test(final String value) {
