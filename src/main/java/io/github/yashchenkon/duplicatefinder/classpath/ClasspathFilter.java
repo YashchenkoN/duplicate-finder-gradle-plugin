@@ -31,8 +31,10 @@ public class ClasspathFilter implements Predicate<String> {
             "^.hg$",
             "^.bzr$");
 
-    public ClasspathFilter(final DuplicateFinderExtension extension) {
+    private final ClasspathPredicate userPredicate;
 
+    public ClasspathFilter(final DuplicateFinderExtension extension) {
+        this.userPredicate = new ClasspathPredicate(extension.getIgnoredClassPatterns());
     }
 
     @Override
