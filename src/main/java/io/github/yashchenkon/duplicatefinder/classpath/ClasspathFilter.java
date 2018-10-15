@@ -39,6 +39,10 @@ public class ClasspathFilter implements Predicate<String> {
 
     @Override
     public boolean test(final String value) {
-        return false;
+        return DEFAULT_IGNORED_RESOURCES_PREDICATE
+                .and(DEFAULT_IGNORED_CLASS_PREDICATE)
+                .and(DEFAULT_IGNORED_LOCAL_DIRECTORIES)
+                .and(userPredicate)
+                .test(value);
     }
 }
