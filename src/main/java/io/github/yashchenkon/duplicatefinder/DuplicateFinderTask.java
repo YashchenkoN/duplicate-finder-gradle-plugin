@@ -34,19 +34,18 @@ public class DuplicateFinderTask extends DefaultTask {
         final Map<String, Set<String>> modulesByFile = new HashMap<>();
         getProject().getConfigurations().stream()
                 .filter(Configuration::isCanBeResolved)
-                .forEach(configuration -> {
-                    configuration.getResolvedConfiguration().getResolvedArtifacts().forEach(artifact -> {
-                        final Enumeration<? extends ZipEntry> entries = new ZipFile(artifact.getFile()).entries();
-                        while (entries.hasMoreElements()) {
-                            final ZipEntry entry = entries.nextElement();
-                            if (!entry.isDirectory() && !classpathFilter.test(entry.getName())) {
-                                final Set<String> modules = modulesByFile.getOrDefault(entry.getName(), new HashSet<>());
-                                modules.add(artifact.getModuleVersion().toString());
-                                modulesByFile.put(entry.getName(), modules);
+                .forEach(configuration -> configuration.getResolvedConfiguration().getResolvedArtifacts()
+                        .forEach(artifact -> {
+                            final Enumeration<? extends ZipEntry> entries = new ZipFile(artifact.getFile()).entries();
+                            while (entries.hasMoreElements()) {
+                                final ZipEntry entry = entries.nextElement();
+                                if (!entry.isDirectory() && !classpathFilter.test(entry.getName())) {
+                                    final Set<String> modules = modulesByFile.getOrDefault(entry.getName(), new HashSet<>());
+                                    modules.add(artifact.getModuleVersion().toString());
+                                    modulesByFile.put(entry.getName(), modules);
+                                }
                             }
-                        }
-                    });
-                });
+                        }));
 
         final List<Map.Entry<String, Set<String>>> duplicated = modulesByFile.entrySet().stream()
                 .filter(e -> e.getValue().size() > 1)
